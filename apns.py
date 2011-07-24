@@ -186,6 +186,21 @@ class Payload(object):
         args = ", ".join(["%s=%r" % (n, getattr(self, n)) for n in attrs])
         return "%s(%s)" % (self.__class__.__name__, args)
 
+class StringPayload(Payload):
+    """A subclass of Payload that receive a string as payload directly"""
+
+    def __init__(self, string=''):
+        self.payload_string = string
+        self._check_size()
+
+    def dict(self):
+        return json.loads(self.payload_string)
+
+    def json(self):
+        return self.payload_string
+
+    def __repr__(self):
+        return "%s(%s)" % (self.__class__.__name__, self.payload_string)
 
 class FeedbackConnection(APNsConnection):
     """
